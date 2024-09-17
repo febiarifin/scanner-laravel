@@ -28,6 +28,7 @@ class QrcodeController extends Controller
         return response()->json([
             'success' => true,
             'presences' => Presence::where('is_present', 1)->get(),
+            'code' => $data,
         ]);
     }
 }

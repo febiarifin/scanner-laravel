@@ -25,6 +25,7 @@
 <body>
     <div id="qr-reader" style="width: 100%"></div>
     <h1>Hasil : </h1>
+    <h3 id="scannerResult">Silahkah scan terlebih dahulu</h3>
     <table id="presence_table" class="table-bordered">
         <thead>
             <tr>
@@ -67,7 +68,7 @@
                     // Assuming response.data is an array of objects
                     var tableBody = $('#presence_table tbody');
                     tableBody.empty(); // Clear the table body before appending new data
-
+                    $('#scannerResult').html(response['code']);
                     $.each(response.data, function(index, attendance) {
                         var row = '<tr>' +
                             '<td>' + attendance.code + '</td>' +
