@@ -9,7 +9,9 @@ class QrcodeController extends Controller
 {
     public function index()
     {
-        return view('qrcode.index');
+        return view('qrcode.index', [
+            'presences' => Presence::where('is_present', 1)->get(),
+        ]);
     }
 
     public function post(Request $request)
@@ -18,8 +20,13 @@ class QrcodeController extends Controller
 
         $presence = Presence::where('code',$data)->first();
 
-        if ($presence) {
-            $presence->update([
+        if (!$presence) {
+            // $presence->update([
+            //     'is_present' => 1,
+            //     'date' => now(),
+            // ]);
+            Presence::create([
+                'code' => $data,
                 'is_present' => 1,
                 'date' => now(),
             ]);

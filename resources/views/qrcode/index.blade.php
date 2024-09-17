@@ -8,15 +8,22 @@
     <title>barcode Scanner</title>
     <script src="{{ asset('html5-qrcode.min.js') }}"></script>
     <style>
-        #presence_table, #presence_table th, #presence_table td {
-            border: 1px solid black; /* Add borders to table, headers, and cells */
-            border-collapse: collapse; /* Ensure borders collapse for cleaner look */
-            padding: 8px; /* Add padding for better readability */
-            text-align: left; /* Align text to the left */
+        #presence_table,
+        #presence_table th,
+        #presence_table td {
+            border: 1px solid black;
+            /* Add borders to table, headers, and cells */
+            border-collapse: collapse;
+            /* Ensure borders collapse for cleaner look */
+            padding: 8px;
+            /* Add padding for better readability */
+            text-align: left;
+            /* Align text to the left */
         }
 
         #presence_table th {
-            background-color: #f2f2f2; /* Optional: Add background color to the headers */
+            background-color: #f2f2f2;
+            /* Optional: Add background color to the headers */
         }
     </style>
 
@@ -34,7 +41,12 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Data will be appended here -->
+            @foreach ($presences as $presence)
+                <tr>
+                    <td>{{ $presence->code }}</td>
+                    <td>{{ $presence->date }}</td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 
@@ -64,15 +76,17 @@
                 success: function(response) {
                     console.log(response);
                     playAudio();
-                    // Tampilkan response['data'] ke dalam presence_table
-                    // Assuming response.data is an array of objects
+                    // Refresh data presence_table
+
+                    // Assuming response contains the updated presence data
                     var tableBody = $('#presence_table tbody');
-                    tableBody.empty(); // Clear the table body before appending new data
-                    $('#scannerResult').html(response['code']);
-                    $.each(response['data'], function(index, attendance) {
+                    tableBody.empty(); // Clear existing rows
+
+                    // Append new rows based on the response data
+                    $.each(response.data, function(index, presence) {
                         var row = '<tr>' +
-                            '<td>' + attendance.code + '</td>' +
-                            '<td>' + attendance.date + '</td>' +
+                            '<td>' + presence.code + '</td>' +
+                            '<td>' + presence.date + '</td>' +
                             '</tr>';
                         tableBody.append(row);
                     });
