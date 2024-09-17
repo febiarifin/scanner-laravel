@@ -18,10 +18,10 @@ class QrcodeController extends Controller
 
         $presence = Presence::find($data);
 
-        if (!$presence) {
-            Presence::create([
-                'code' => $data,
+        if ($presence) {
+            $presence->update([
                 'is_present' => 1,
+                'date' => now(),
             ]);
         }
 

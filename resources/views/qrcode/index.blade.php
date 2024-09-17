@@ -7,12 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>barcode Scanner</title>
     <script src="{{ asset('html5-qrcode.min.js') }}"></script>
+    <style>
+        #presence_table, #presence_table th, #presence_table td {
+            border: 1px solid black; /* Add borders to table, headers, and cells */
+            border-collapse: collapse; /* Ensure borders collapse for cleaner look */
+            padding: 8px; /* Add padding for better readability */
+            text-align: left; /* Align text to the left */
+        }
+
+        #presence_table th {
+            background-color: #f2f2f2; /* Optional: Add background color to the headers */
+        }
+    </style>
+
 </head>
 
 <body>
     <div id="qr-reader" style="width: 100%"></div>
     <h1>Hasil : </h1>
-    <table id="presence_table">
+    <table id="presence_table" class="table-bordered">
         <thead>
             <tr>
                 <th>KODE USER</th>
@@ -57,8 +70,8 @@
 
                     $.each(response.data, function(index, attendance) {
                         var row = '<tr>' +
-                            '<td>' + attendance.user_code + '</td>' +
-                            '<td>' + attendance.attendance_date + '</td>' +
+                            '<td>' + attendance.code + '</td>' +
+                            '<td>' + attendance.date + '</td>' +
                             '</tr>';
                         tableBody.append(row);
                     });

@@ -11,6 +11,7 @@ class Presence extends Model
 
     protected $fillable = [
         'code',
-        'is_present'
+        'is_present',
+        'date',
     ];
 }

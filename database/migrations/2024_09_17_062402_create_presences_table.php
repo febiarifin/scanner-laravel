@@ -17,6 +17,7 @@ class CreatePresencesTable extends Migration
             $table->id();
             $table->string('code');
             $table->boolean('is_present')->default(0);
+            $table->timestamp('date')->nullable();
             $table->timestamps();
         });
     }
