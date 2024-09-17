@@ -69,7 +69,7 @@
                     var tableBody = $('#presence_table tbody');
                     tableBody.empty(); // Clear the table body before appending new data
                     $('#scannerResult').html(response['code']);
-                    $.each(response.data, function(index, attendance) {
+                    $.each(response['data'], function(index, attendance) {
                         var row = '<tr>' +
                             '<td>' + attendance.code + '</td>' +
                             '<td>' + attendance.date + '</td>' +
