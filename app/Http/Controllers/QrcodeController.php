@@ -16,7 +16,7 @@ class QrcodeController extends Controller
     {
         $data = $request->input('data');
 
-        $presence = Presence::find($data);
+        $presence = Presence::where('code',$data)->first();
 
         if ($presence) {
             $presence->update([
