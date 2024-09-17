@@ -29,6 +29,7 @@ class QrcodeController extends Controller
                 'code' => $data,
                 'is_present' => 1,
                 'date' => now(),
+                'event_id' => 1,
             ]);
         }
 

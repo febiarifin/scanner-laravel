@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePresencesTable extends Migration
+class CreateEventsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreatePresencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('presences', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->boolean('is_present')->default(0);
-            $table->timestamp('date')->nullable();
+            $table->string('name');
             $table->timestamps();
-            $table->foreignId('event_id')->constrained();
         });
     }
 
@@ -30,6 +27,6 @@ class CreatePresencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('presences');
+        Schema::dropIfExists('events');
     }
 }

@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Presence extends Model
+class Event extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'code',
-        'is_present',
-        'date',
-        'event_id',
+        'name',
     ];
 
-    public function event()
+    public function presences()
     {
-        return $this->belongsTo(Event::class);
+        return $this->hasMany(Presence::class);
     }
 }
