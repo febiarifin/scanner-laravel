@@ -80,7 +80,7 @@
 
                     // Assuming response contains the updated presence data
                     var tableBody = $('#presence_table tbody');
-                    tableBody.empty(); // Clear existing rows
+                    // tableBody.empty(); // Clear existing rows
 
                     // Append new rows based on the response data
                     $.each(response.data, function(index, presence) {

@@ -18,7 +18,7 @@ class QrcodeController extends Controller
     {
         $data = $request->input('data');
 
-        $presence = Presence::where('code',$data)->first();
+        $presence = Presence::orderBy('date','desc')->where('code',$data)->first();
 
         if (!$presence) {
             // $presence->update([
@@ -34,7 +34,7 @@ class QrcodeController extends Controller
 
         return response()->json([
             'success' => true,
-            'presences' => Presence::where('is_present', 1)->get(),
+            'presences' => Presence::orderBy('date','desc')->where('is_present', 1)->get(),
             'code' => $data,
         ]);
     }
