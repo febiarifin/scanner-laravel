@@ -11,6 +11,12 @@ class Presence extends Model
 
     protected $fillable = [
         'code',
+        'nama',
+        'kelas',
+        'nama_bapak',
+        'nama_ibu',
+        'alamat',
+        'terdaftar',
         'is_present',
         'date',
         'event_id',

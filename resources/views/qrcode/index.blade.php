@@ -35,12 +35,14 @@
     <div id="qr-reader" style="width: 100%"></div>
     <h1>Hasil : </h1>
     <h3 id="scannerResult">Silahkah scan terlebih dahulu</h3>
+    <h3 id="messageResult" style="color: red;"></h3>
     <table id="presence_table" class="table-bordered">
         <thead>
             <tr>
                 <th width="80">KODE USER</th>
                 <th>TANGGAL KEHADIRAN</th>
                 <th>STATUS</th>
+                <th>TERDAFTAR</th>
             </tr>
         </thead>
         <tbody>
@@ -49,6 +51,8 @@
                     <td>{{ $presence->code }}</td>
                     <td>{{ $presence->date }}</td>
                     <td bgcolor="green" style="color:white;">HADIR</td>
+                    <td bgcolor="{{ $presence->terdaftar ? 'green' : 'red' }}" style="color:white;">
+                        {{ $presence->terdaftar ? 'YA' : 'TIDAK' }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -81,6 +85,7 @@
                     console.log(response);
                     playAudio();
                     $('#scannerResult').html(response['code']);
+                    $('#messageResult').html(response['message']);
                     // Assuming response contains the updated presence data
                     var tableBody = $('#presence_table tbody');
                     tableBody.empty(); // Clear existing rows
@@ -88,15 +93,19 @@
                     if (Array.isArray(response.presences) && response.presences.length > 0) {
                         // Loop through the presences and append each to the table
                         $.each(response.presences, function(index, presence) {
+                            var terdaftarStatus = presence.terdaftar ?
+                                '<td bgcolor="red" style="color:white;">TIDAK</td>' :
+                                '<td bgcolor="green" style="color:white;">IYA</td>';
+
                             var row = '<tr>' +
                                 '<td>' + presence.code + '</td>' +
                                 '<td>' + presence.date + '</td>' +
                                 '<td bgcolor="green" style="color:white;">HADIR</td>' +
+                                terdaftarStatus +
                                 '</tr>';
                             tableBody.append(row);
                         });
                     } else {
-                        // Handle the case when no data is returned
                         tableBody.append('<tr><td colspan="2">No presence data found</td></tr>');
                     }
                 }
