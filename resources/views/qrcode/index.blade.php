@@ -19,11 +19,13 @@
             /* Add padding for better readability */
             text-align: left;
             /* Align text to the left */
+            font-size: 10pt;
         }
 
         #presence_table th {
             background-color: #f2f2f2;
             /* Optional: Add background color to the headers */
+            font-size: 10pt;
         }
     </style>
 
@@ -36,7 +38,7 @@
     <table id="presence_table" class="table-bordered">
         <thead>
             <tr>
-                <th>KODE USER</th>
+                <th width="80">KODE USER</th>
                 <th>TANGGAL KEHADIRAN</th>
                 <th>STATUS</th>
             </tr>
