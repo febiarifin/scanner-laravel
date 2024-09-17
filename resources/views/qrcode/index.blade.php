@@ -76,14 +76,13 @@
                 success: function(response) {
                     console.log(response);
                     playAudio();
-                    // Refresh data presence_table
-
+                    $('#scannerResult').html(response['code']);
                     // Assuming response contains the updated presence data
                     var tableBody = $('#presence_table tbody');
                     // tableBody.empty(); // Clear existing rows
 
                     // Append new rows based on the response data
-                    $.each(response.data, function(index, presence) {
+                    $.each(response['code'], function(index, presence) {
                         var row = '<tr>' +
                             '<td>' + presence.code + '</td>' +
                             '<td>' + presence.date + '</td>' +
