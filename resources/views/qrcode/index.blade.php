@@ -24,13 +24,12 @@
             <h4 class="float-end">#{{ $event->name }}</h4>
         </div>
         <div id="qr-reader" style="width: 100%"></div>
-        <span class="fw-bold">HASIL:</span>
-        <div id="scannerResult">Silahkah scan terlebih dahulu</div>
-        <div id="messageResult" style="color: red;" class="mb-3"></div>
         <div class="text-center">
             TOTAL KEHADIRAN
             <h1 class="text-success" id="counter">{{ count($count_presences) }}</h1>
         </div>
+        <span class="fw-bold">HASIL:  <span id="messageResult" class="mb-1"></span></span>
+        <div id="scannerResult" class="mb-2">Silahkah scan terlebih dahulu</div>
         <table id="presence_table" class="table table-bordered">
             <thead>
                 <tr>
@@ -108,7 +107,7 @@
                             .removeClass('badge text-bg-success')
                             .addClass('badge text-bg-danger');
                     }
-                    
+
                     $('#counter').html(response['counter']);
 
                     var tableBody = $('#presence_table tbody');

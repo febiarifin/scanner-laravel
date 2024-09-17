@@ -36,6 +36,9 @@
                                     @csrf
                                     <input type="hidden" name="event_id" value="{{ $event->id }}">
                                     <div class="modal-body">
+                                        <div class="alert alert-primary">
+                                            Download template import data presensi <a href="https://docs.google.com/spreadsheets/d/1eEQZgeS6LGC6S14TDQa_n-enHmu7lDFF/edit?usp=sharing&ouid=108100506266177956543&rtpof=true&sd=true" target="_blank"><i class="bi bi-download"></i> DOWNLOAD</a>
+                                        </div>
                                         <div class="mb-3">
                                             <label>File</label>
                                             <input type="file" name="file" class="form-control" accept=".xlsx, .csv"
