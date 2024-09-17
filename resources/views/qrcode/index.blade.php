@@ -12,7 +12,18 @@
 <body>
     <div id="qr-reader" style="width: 100%"></div>
     <h1>Hasil : </h1>
-    <h3 id="scannerResult">Silahkah scan terlebih dahulu</h3>
+    <table id="presence_table">
+        <thead>
+            <tr>
+                <th>KODE USER</th>
+                <th>TANGGAL KEHADIRAN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be appended here -->
+        </tbody>
+    </table>
+
     <audio id="myAudio">
         <source src="{{ asset('sounds/qrcode.mp3') }}" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -39,7 +50,18 @@
                 success: function(response) {
                     console.log(response);
                     playAudio();
-                    $('#scannerResult').html(response['data']);
+                    // Tampilkan response['data'] ke dalam presence_table
+                    // Assuming response.data is an array of objects
+                    var tableBody = $('#presence_table tbody');
+                    tableBody.empty(); // Clear the table body before appending new data
+
+                    $.each(response.data, function(index, attendance) {
+                        var row = '<tr>' +
+                            '<td>' + attendance.user_code + '</td>' +
+                            '<td>' + attendance.attendance_date + '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
                 }
             });
         }
