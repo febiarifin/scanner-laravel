@@ -5,58 +5,54 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>barcode Scanner</title>
+    <title>Barcode Scanner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{{ asset('html5-qrcode.min.js') }}"></script>
     <style>
-        #presence_table,
-        #presence_table th,
-        #presence_table td {
-            border: 1px solid black;
-            /* Add borders to table, headers, and cells */
-            border-collapse: collapse;
-            /* Ensure borders collapse for cleaner look */
-            padding: 8px;
-            /* Add padding for better readability */
-            text-align: left;
-            /* Align text to the left */
-            font-size: 10pt;
-        }
-
-        #presence_table th {
-            background-color: #f2f2f2;
-            /* Optional: Add background color to the headers */
+        table, tr, td{
             font-size: 10pt;
         }
     </style>
-
 </head>
 
 <body>
-    <div id="qr-reader" style="width: 100%"></div>
-    <h1>Hasil : </h1>
-    <h3 id="scannerResult">Silahkah scan terlebih dahulu</h3>
-    <h3 id="messageResult" style="color: red;"></h3>
-    <table id="presence_table" class="table-bordered">
-        <thead>
-            <tr>
-                <th width="80">KODE USER</th>
-                <th>TANGGAL KEHADIRAN</th>
-                <th>STATUS</th>
-                <th>TERDAFTAR</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($presences as $presence)
+    <div class="container mt-2">
+        <div class="mb-3">
+            <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary shadow btn-sm"><i class="bi bi-arrow-left"></i> Rekap Presensi</a>
+            <h4 class="float-end">#{{ $event->name }}</h4>
+        </div>
+        <div id="qr-reader" style="width: 100%"></div>
+        <span class="fw-bold">HASIL:</span>
+        <div id="scannerResult">Silahkah scan terlebih dahulu</div>
+        <div id="messageResult" style="color: red;" class="mb-3"></div>
+        <div class="text-center">
+            TOTAL KEHADIRAN
+            <h1 class="text-success" id="counter">{{ count($count_presences) }}</h1>
+        </div>
+        <table id="presence_table" class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>{{ $presence->code }}</td>
-                    <td>{{ $presence->date }}</td>
-                    <td bgcolor="green" style="color:white;">HADIR</td>
-                    <td bgcolor="{{ $presence->terdaftar ? 'green' : 'red' }}" style="color:white;">
-                        {{ $presence->terdaftar ? 'YA' : 'TIDAK' }}</td>
+                    <th>KODE USER</th>
+                    <th>TANGGAL KEHADIRAN</th>
+                    <th>STATUS</th>
+                    <th>TERDAFTAR</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($presences as $presence)
+                    <tr>
+                        <td>{{ $presence->code }}</td>
+                        <td>{{ $presence->date }}</td>
+                        <td class="bg-success text-white">HADIR</td>
+                        <td class="{{ $presence->terdaftar ? 'bg-success' : 'bg-danger' }} text-white">
+                            {{ $presence->terdaftar ? 'YA' : 'TIDAK' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
     <audio id="myAudio">
         <source src="{{ asset('sounds/qrcode.mp3') }}" type="audio/mpeg">
@@ -75,38 +71,65 @@
             scannerResult = decodedText;
 
             $.ajax({
-                url: '/post',
+                url: '{{ route('scanner.store') }}',
                 type: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
-                    data: scannerResult
+                    code: scannerResult,
+                    event_id: '{{ $event->id }}',
                 },
                 success: function(response) {
                     console.log(response);
                     playAudio();
-                    $('#scannerResult').html(response['code']);
-                    $('#messageResult').html(response['message']);
-                    // Assuming response contains the updated presence data
+                    if (response['detail']) {
+                        let terdaftar = response['detail'].is_registered == 1 ? '<b>TERDAFTAR</b>' :
+                            '<b>TIDAK TERDAFTAR</b>';
+                        let message = 'NIS: <b>' + response['detail'].code + '</b><br>Nama: <b>' + response[
+                                'detail']
+                            .name + '</b><br>Nama Ayah: <b>' + response['detail']
+                            .father_name + '</b><br>Nama Ibu: <b>' + response['detail'].mother_name +
+                            '</b><br>Kelas: <b>' +
+                            response['detail'].kelas + '</b><br>Alamat: <b>' + response['detail'].address +
+                            '</b><br>Status: ';
+                        $('#scannerResult').html(message + terdaftar)
+                            .addClass('p-3 rounded border border-primary');;
+                    } else {
+                        $('#scannerResult').html("Data kehadiran tidak ditemukan");
+                    }
+
+                    if (response['status'] == true) {
+                        $('#messageResult')
+                            .html(response['message'])
+                            .removeClass('badge text-bg-danger')
+                            .addClass('badge text-bg-success');
+                    } else {
+                        $('#messageResult')
+                            .html(response['message'])
+                            .removeClass('badge text-bg-success')
+                            .addClass('badge text-bg-danger');
+                    }
+                    
+                    $('#counter').html(response['counter']);
+
                     var tableBody = $('#presence_table tbody');
-                    tableBody.empty(); // Clear existing rows
+                    tableBody.empty();
 
                     if (Array.isArray(response.presences) && response.presences.length > 0) {
-                        // Loop through the presences and append each to the table
                         $.each(response.presences, function(index, presence) {
-                            var terdaftarStatus = presence.terdaftar ?
-                                '<td bgcolor="red" style="color:white;">TIDAK</td>' :
-                                '<td bgcolor="green" style="color:white;">IYA</td>';
+                            var terdaftarStatus = presence.is_registered == 1 ?
+                                '<td class="bg-success text-white">IYA</td>' :
+                                '<td class="bg-danger text-white">TIDAK</td>';
 
                             var row = '<tr>' +
                                 '<td>' + presence.code + '</td>' +
                                 '<td>' + presence.date + '</td>' +
-                                '<td bgcolor="green" style="color:white;">HADIR</td>' +
+                                '<td class="bg-success text-white">HADIR</td>' +
                                 terdaftarStatus +
                                 '</tr>';
                             tableBody.append(row);
                         });
                     } else {
-                        tableBody.append('<tr><td colspan="2">No presence data found</td></tr>');
+                        tableBody.append('<tr><td colspan="4">No presence data found</td></tr>');
                     }
                 }
             });

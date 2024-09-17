@@ -16,12 +16,12 @@ class CreatePresencesTable extends Migration
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->string('nama')->nullable();
+            $table->string('name')->nullable();
             $table->string('kelas')->nullable();
-            $table->string('nama_bapak')->nullable();
-            $table->string('nama_ibu')->nullable();
-            $table->string('alamat')->nullable();
-            $table->boolean('terdaftar')->default(0);
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->string('address')->nullable();
+            $table->boolean('is_registered')->default(0);
             $table->boolean('is_present')->default(0);
             $table->timestamp('date')->nullable();
             $table->timestamps();

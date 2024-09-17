@@ -11,6 +11,7 @@ class Event extends Model
 
     protected $fillable = [
         'name',
+        'date',
     ];
 
     public function presences()

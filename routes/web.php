@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\EventCotroller;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\QrcodeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,5 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\QrcodeController::class, 'index']);
-Route::post('/post', [App\Http\Controllers\QrcodeController::class, 'post'])->name('post');
+Route::get('login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('login', [LoginController::class, 'auth'])->name('login.auth')->middleware('guest');
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/', [EventCotroller::class, 'index']);
+    Route::post('scanner/store', [QrcodeController::class, 'post'])->name('scanner.store');
+
+    Route::resource('events', EventCotroller::class);
+    Route::post('events/import', [EventCotroller::class, 'import'])->name('events.import');
+    Route::get('events/export/{event}', [EventCotroller::class, 'export'])->name('events.export');
+
+    Route::get('/logout', function (){
+        \Illuminate\Support\Facades\Session::flush();
+        \Illuminate\Support\Facades\Auth::logout();
+        return redirect('/');
+    })->name('logout');
+});
