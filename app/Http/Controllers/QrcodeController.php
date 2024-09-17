@@ -19,7 +19,7 @@ class QrcodeController extends Controller
         $presence = Presence::find($data);
 
         if (!$presence) {
-            $presence->create([
+            Presence::create([
                 'code' => $data,
                 'is_present' => 1,
             ]);
