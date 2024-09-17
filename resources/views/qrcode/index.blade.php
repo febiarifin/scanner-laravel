@@ -38,6 +38,7 @@
             <tr>
                 <th>KODE USER</th>
                 <th>TANGGAL KEHADIRAN</th>
+                <th>STATUS</th>
             </tr>
         </thead>
         <tbody>
@@ -45,6 +46,7 @@
                 <tr>
                     <td>{{ $presence->code }}</td>
                     <td>{{ $presence->date }}</td>
+                    <td bgcolor="green" style="color:white;">HADIR</td>
                 </tr>
             @endforeach
         </tbody>
@@ -87,6 +89,7 @@
                             var row = '<tr>' +
                                 '<td>' + presence.code + '</td>' +
                                 '<td>' + presence.date + '</td>' +
+                                '<td bgcolor="green" style="color:white;">HADIR</td>' +
                                 '</tr>';
                             tableBody.append(row);
                         });
