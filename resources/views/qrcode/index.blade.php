@@ -79,16 +79,21 @@
                     $('#scannerResult').html(response['code']);
                     // Assuming response contains the updated presence data
                     var tableBody = $('#presence_table tbody');
-                    // tableBody.empty(); // Clear existing rows
+                    tableBody.empty(); // Clear existing rows
 
-                    // Append new rows based on the response data
-                    $.each(response['code'], function(index, presence) {
-                        var row = '<tr>' +
-                            '<td>' + presence.code + '</td>' +
-                            '<td>' + presence.date + '</td>' +
-                            '</tr>';
-                        tableBody.append(row);
-                    });
+                    if (Array.isArray(response.presences) && response.presences.length > 0) {
+                        // Loop through the presences and append each to the table
+                        $.each(response.presences, function(index, presence) {
+                            var row = '<tr>' +
+                                '<td>' + presence.code + '</td>' +
+                                '<td>' + presence.date + '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                    } else {
+                        // Handle the case when no data is returned
+                        tableBody.append('<tr><td colspan="2">No presence data found</td></tr>');
+                    }
                 }
             });
         }
