@@ -151,7 +151,9 @@ class EventCotroller extends Controller
 
     public function presenceManual(Request $request)
     {
+        $event = Event::find($request->input('event_id'));
         $presence = Presence::where('code',  $request->presence_code)
+        ->where('event_id', $event->id)
         ->orWhere('name', $request->presence_code)
         ->first();
         if ($presence) {
@@ -162,10 +164,10 @@ class EventCotroller extends Controller
 
             return response()->json([
                 'success' => true,
-                'presences' => Presence::orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+                'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
                 'detail' => $presence,
                 'message' => 'Presensi manual berhasil',
-                'counter' => Presence::orderBy('date', 'desc')->where('is_present', 1)->count(),
+                'counter' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->count(),
             ]);
         }else{
             return response()->json([

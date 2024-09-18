@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Presence;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Constraint\IsFalse;
@@ -19,8 +20,9 @@ class QrcodeController extends Controller
     {
         $code = $request->input('code');
         $event_id = $request->input('event_id');
+        $event = Event::find($request->input('event_id'));
 
-        $presence = Presence::where('code', $code)->first();
+        $presence = Presence::where('code', $code)->where('event_id', $event_id)->first();
 
         if ($presence) {
             $presence->update([
@@ -35,11 +37,11 @@ class QrcodeController extends Controller
         }
         return response()->json([
             'success' => true,
-            'presences' => Presence::orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+            'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
             'detail' => $presence ? $presence : null,
             'message' => $message,
             'status' => $status,
-            'counter' => Presence::orderBy('date', 'desc')->where('is_present', 1)->count(),
+            'counter' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->count(),
         ]);
     }
 }

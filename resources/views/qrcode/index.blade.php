@@ -95,6 +95,7 @@
                 data: {
                     _token: '{{ csrf_token() }}',
                     code: scannerResult,
+                    event_id: '{{ $event->id }}',
                 },
                 success: function(response) {
                     // console.log(response);
@@ -174,7 +175,8 @@
                     method: "POST",
                     data: {
                         _token: "{{ csrf_token() }}",
-                        presence_code: presenceCode
+                        presence_code: presenceCode,
+                        event_id: '{{ $event->id }}',
                     },
                     success: function(response) {
                         // console.log(response);
