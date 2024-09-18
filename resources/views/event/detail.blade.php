@@ -54,6 +54,8 @@
                     </div>
 
                     <a href="{{ route('events.export', $event->id) }}" class="btn btn-secondary mb-2"><i class="bi bi-download"></i> Export Data Presensi</a>
+
+                    <a href="{{ route('events.reset', $event->id) }}" class="btn btn-danger mb-2" onclick="return confirm('Yakin ingin reset data presensi?')"><i class="bi bi-trash"></i> Reset Data Presensi</a>
                 </div>
                 <table class="table table-bordered">
                     <thead>

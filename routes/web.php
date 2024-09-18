@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('events', EventCotroller::class);
     Route::post('events/import', [EventCotroller::class, 'import'])->name('events.import');
     Route::get('events/export/{event}', [EventCotroller::class, 'export'])->name('events.export');
+    Route::get('events/reset/{event}', [EventCotroller::class, 'reset'])->name('events.reset');
+    Route::post('events/presence-manual', [EventCotroller::class, 'presenceManual'])->name('events.presence.manual');
 
     Route::get('/logout', function (){
         \Illuminate\Support\Facades\Session::flush();

@@ -26,7 +26,6 @@ class QrcodeController extends Controller
             $presence->update([
                 'is_present' => 1,
                 'date' => now(),
-                'event_id' => $event_id,
             ]);
             $status = true;
             $message = "Presensi berhasil";

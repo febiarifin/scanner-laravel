@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{{ asset('html5-qrcode.min.js') }}"></script>
     <style>
-        table, tr, td{
+        table,
+        tr,
+        td {
             font-size: 10pt;
         }
     </style>
@@ -19,17 +21,35 @@
 
 <body>
     <div class="container mt-2">
-        <div class="mb-3">
-            <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary shadow btn-sm"><i class="bi bi-arrow-left"></i> Rekap Presensi</a>
-            <h4 class="float-end">#{{ $event->name }}</h4>
+        <div class="mb-3 d-flex">
+            <div class="flex-grow-1">
+                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary shadow btn-sm"><i
+                        class="bi bi-arrow-left"></i> Rekap Presensi</a>
+            </div>
+            <h4 class="flex-shrink-0">#{{ $event->name }}</h4>
         </div>
+
+        <form id="presenceForm" class="mb-1 row">
+            <div class="col-10">
+                <input type="text" name="presence_code" id="presence_code" class="form-control"
+                    placeholder="Inputkan NIS / Nama Siswa" required>
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary btm-sm"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+
         <div id="qr-reader" style="width: 100%"></div>
+
         <div class="text-center">
             TOTAL KEHADIRAN
             <h1 class="text-success" id="counter">{{ count($count_presences) }}</h1>
         </div>
-        <span class="fw-bold">HASIL:  <span id="messageResult" class="mb-1"></span></span>
+
+        <span class="fw-bold">HASIL: <span id="messageResult" class="mb-1"></span></span>
+
         <div id="scannerResult" class="mb-2">Silahkah scan terlebih dahulu</div>
+
         <table id="presence_table" class="table table-bordered">
             <thead>
                 <tr>
@@ -75,10 +95,9 @@
                 data: {
                     _token: '{{ csrf_token() }}',
                     code: scannerResult,
-                    event_id: '{{ $event->id }}',
                 },
                 success: function(response) {
-                    console.log(response);
+                    // console.log(response);
                     playAudio();
                     if (response['detail']) {
                         let terdaftar = response['detail'].is_registered == 1 ? '<b>TERDAFTAR</b>' :
@@ -145,6 +164,90 @@
             });
 
         html5QrcodeScanner.render(onScanSuccess);
+
+        $(document).ready(function() {
+            $('#presenceForm').on('submit', function(e) {
+                e.preventDefault();
+                var presenceCode = $('#presence_code').val();
+                $.ajax({
+                    url: "{{ route('events.presence.manual') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        presence_code: presenceCode
+                    },
+                    success: function(response) {
+                        // console.log(response);
+                        playAudio();
+
+                        if (response['detail']) {
+                            if (response['detail']) {
+                                let terdaftar = response['detail'].is_registered == 1 ?
+                                    '<b>TERDAFTAR</b>' :
+                                    '<b>TIDAK TERDAFTAR</b>';
+                                let message = 'NIS: <b>' + response['detail'].code +
+                                    '</b><br>Nama: <b>' + response[
+                                        'detail']
+                                    .name + '</b><br>Nama Ayah: <b>' + response['detail']
+                                    .father_name + '</b><br>Nama Ibu: <b>' + response['detail']
+                                    .mother_name +
+                                    '</b><br>Kelas: <b>' +
+                                    response['detail'].kelas + '</b><br>Alamat: <b>' + response[
+                                        'detail'].address +
+                                    '</b><br>Status: ';
+                                $('#scannerResult').html(message + terdaftar)
+                                    .addClass('p-3 rounded border border-primary');;
+                            } else {
+                                $('#scannerResult').html("Data kehadiran tidak ditemukan");
+                            }
+
+                            $('#messageResult')
+                                .html(response['message'])
+                                .removeClass('badge text-bg-danger')
+                                .addClass('badge text-bg-success');
+
+                            $('#counter').html(response['counter']);
+
+                            var tableBody = $('#presence_table tbody');
+                            tableBody.empty();
+
+                            if (Array.isArray(response.presences) && response.presences.length >
+                                0) {
+                                $.each(response.presences, function(index, presence) {
+                                    var terdaftarStatus = presence.is_registered == 1 ?
+                                        '<td class="bg-success text-white">IYA</td>' :
+                                        '<td class="bg-danger text-white">TIDAK</td>';
+
+                                    var row = '<tr>' +
+                                        '<td>' + presence.code + '</td>' +
+                                        '<td>' + presence.date + '</td>' +
+                                        '<td class="bg-success text-white">HADIR</td>' +
+                                        terdaftarStatus +
+                                        '</tr>';
+                                    tableBody.append(row);
+                                });
+                            } else {
+                                tableBody.append(
+                                    '<tr><td colspan="4">No presence data found</td></tr>');
+                            }
+                        } else {
+                            $('#messageResult')
+                                .html(response['message'])
+                                .removeClass('badge text-bg-success')
+                                .addClass('badge text-bg-danger');
+                            $('#scannerResult').html("Data kehadiran tidak ditemukan");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#messageResult')
+                            .html('Terjadi kesalahan')
+                            .removeClass('badge text-bg-success')
+                            .addClass('badge text-bg-danger');
+                        $('#scannerResult').html("Data kehadiran tidak ditemukan");
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

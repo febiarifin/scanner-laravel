@@ -140,4 +140,39 @@ class EventCotroller extends Controller
         // return view('report.excel', $data);
         return Excel::download(new PresenceExport($event, $event->presences), 'EXPORT_PRESENSI_EVENT_' . $event->name . '.xlsx');
     }
+
+    public function reset(Event $event)
+    {
+        $event->load('presences');
+        $event->presences()->delete();
+        toastr()->success('Reset data presensi berhasil');
+        return back();
+    }
+
+    public function presenceManual(Request $request)
+    {
+        $presence = Presence::where('code',  $request->presence_code)
+        ->orWhere('name', $request->presence_code)
+        ->first();
+        if ($presence) {
+            $presence->update([
+                'is_present' => 1,
+                'date' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'presences' => Presence::orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+                'detail' => $presence,
+                'message' => 'Presensi manual berhasil',
+                'counter' => Presence::orderBy('date', 'desc')->where('is_present', 1)->count(),
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'detail' => null,
+                'message' => 'Data tidak ditemukan',
+            ]);
+        }
+    }
 }
