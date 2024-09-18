@@ -65,6 +65,7 @@ class EventCotroller extends Controller
         $data = [
             'event' => $event,
             'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+            'get_presences' => $event->presences,
             'count_presences' => $event->presences()->where('is_present', 1)->get(),
         ];
         return view('qrcode.index', $data);

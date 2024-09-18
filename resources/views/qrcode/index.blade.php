@@ -6,8 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barcode Scanner</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="{{ asset('html5-qrcode.min.js') }}"></script>
     <style>
@@ -31,11 +33,14 @@
 
         <form id="presenceForm" class="mb-1 row">
             <div class="col-10">
-                <input type="text" name="presence_code" id="presence_code" class="form-control"
-                    placeholder="Inputkan NIS / Nama Siswa" required>
+                <select class="js-example-basic-single" name="presence_code" id="presence_code" style="width: 100% !important; font-size: 14pt;" required>
+                    @foreach ($get_presences as $presence)
+                        <option value="{{ $presence->code }}">{{ $presence->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-2">
-                <button type="submit" class="btn btn-primary btm-sm"><i class="bi bi-search"></i></button>
+                <button type="submit" class="btn btn-primary btm-sm shadow"><i class="bi bi-check-circle"></i></button>
             </div>
         </form>
 
@@ -249,6 +254,15 @@
                     }
                 });
             });
+        });
+    </script>
+
+    {{-- Select2 --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".js-example-basic-single").select2();
         });
     </script>
 </body>
