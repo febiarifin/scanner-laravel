@@ -18,7 +18,7 @@ class QrcodeController extends Controller
 
     public function post(Request $request)
     {
-        $code = $request->input('code');
+        $code = base64_decode($request->input('code'));
         $event_id = $request->input('event_id');
         $event = Event::find($request->input('event_id'));
 

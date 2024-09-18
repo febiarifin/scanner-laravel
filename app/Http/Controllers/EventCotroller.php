@@ -178,4 +178,26 @@ class EventCotroller extends Controller
             ]);
         }
     }
+
+    public function print(Event $event)
+    {
+        $event->load('presences');
+        $data = [
+            'title' => 'Print Surat Undangan #'. $event->name,
+            'presences' => $event->presences,
+            'is_single' => false,
+        ];
+        return view('event.print', $data);
+    }
+
+    public function printSingle($id)
+    {
+        $presence = Presence::findOrFail($id);
+        $data = [
+            'title' => 'Print Surat Undangan #'. $presence->event->name,
+            'presence' => $presence,
+            'is_single' => true,
+        ];
+        return view('event.print', $data);
+    }
 }
