@@ -38,7 +38,7 @@
                 <div style="position: relative; left: -200px;">
                     <div>
                         <span
-                            style="font-size: 14pt; font-weight:bold; position: relative; top: 195px; left: -115px;">{{ $presence->name }}
+                            style="font-size: 14pt; position: relative; top: 185px; left: -115px;">{{ $presence->name }}
                             / {{ $presence->code }}</span>
                     </div>
                     <div style="position: relative; top: 800px; left: -265px;">{!! QrCode::size(150)->generate(base64_encode($presence->code)) !!}</div>
