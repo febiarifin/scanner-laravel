@@ -186,7 +186,7 @@ class EventCotroller extends Controller
         $event = Event::with(['presences'])->findOrFail($request->event_id);
         $data = [
             'title' => 'Print Surat Undangan #' . $event->name,
-            'presences' => $event->presences()->where('kelas', $request->kelas)->get(),
+            'presences' => $event->presences()->where('kelas', $request->kelas)->where('is_registered', 1)->get(),
             'is_single' => false,
         ];
         return view('event.print', $data);
