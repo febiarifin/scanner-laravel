@@ -80,10 +80,12 @@ class EventCotroller extends Controller
     public function edit(Event $event)
     {
         $event->load('presences');
+        $classes = $event->presences()->select('kelas')->groupBy('kelas')->get();
         $data = [
             'title' => 'Detail Event',
             'event' => $event,
             'presences' => $event->presences,
+            'classes' => $classes,
         ];
         return view('event.detail', $data);
     }
@@ -154,9 +156,9 @@ class EventCotroller extends Controller
     {
         $event = Event::find($request->input('event_id'));
         $presence = Presence::where('code',  $request->presence_code)
-        ->where('event_id', $event->id)
-        ->orWhere('name', $request->presence_code)
-        ->first();
+            ->where('event_id', $event->id)
+            ->orWhere('name', $request->presence_code)
+            ->first();
         if ($presence) {
             $presence->update([
                 'is_present' => 1,
@@ -170,7 +172,7 @@ class EventCotroller extends Controller
                 'message' => 'Presensi manual berhasil',
                 'counter' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->count(),
             ]);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
                 'detail' => null,
@@ -179,12 +181,12 @@ class EventCotroller extends Controller
         }
     }
 
-    public function print(Event $event)
+    public function print(Request $request)
     {
-        $event->load('presences');
+        $event = Event::with(['presences'])->findOrFail($request->event_id);
         $data = [
-            'title' => 'Print Surat Undangan #'. $event->name,
-            'presences' => $event->presences,
+            'title' => 'Print Surat Undangan #' . $event->name,
+            'presences' => $event->presences()->where('kelas', $request->kelas)->get(),
             'is_single' => false,
         ];
         return view('event.print', $data);
@@ -194,7 +196,7 @@ class EventCotroller extends Controller
     {
         $presence = Presence::findOrFail($id);
         $data = [
-            'title' => 'Print Surat Undangan #'. $presence->event->name,
+            'title' => 'Print Surat Undangan #' . $presence->event->name,
             'presence' => $presence,
             'is_single' => true,
         ];

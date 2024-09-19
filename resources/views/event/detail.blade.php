@@ -57,8 +57,43 @@
                     <a href="{{ route('events.export', $event->id) }}" class="btn btn-success mb-2"><i
                             class="bi bi-download"></i> Export Data Presensi</a>
 
-                    <a href="{{ route('events.print', $event->id) }}" class="btn btn-secondary mb-2" target="_blank"><i
-                            class="bi bi-printer"></i> Print Surat Undangan</a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-secondary mb-2" data-bs-toggle="modal"
+                        data-bs-target="#printModal">
+                        <i class="bi bi-printer"></i> Print Surat Undangan
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="printModal" tabindex="-1" aria-labelledby="printModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="printModalLabel">Print Surat Undangan</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('events.print') }}" method="post" target="_blank">
+                                    @csrf
+                                    <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label>Pilih Kelas</label>
+                                            <select name="kelas" id="kelas" class="form-control" required>
+                                                <option value="">--pilih kelas--</option>
+                                               @foreach ($classes as $class)
+                                               <option value="{{ $class->kelas }}">{{ $class->kelas }}</option>
+                                               @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Print</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
                     <a href="{{ route('events.reset', $event->id) }}" class="btn btn-danger mb-2"
                         onclick="return confirm('Yakin ingin reset data presensi?')"><i class="bi bi-trash"></i> Reset Data
@@ -123,7 +158,8 @@
                                 <td class="{{ $presence->is_registered ? 'bg-success' : 'bg-danger' }}  text-white">
                                     {{ $presence->is_registered ? 'IYA' : 'TIDAK' }}</td>
                                 <td>
-                                    <a href="{{ route('events.print.single', $presence->id) }}" class="btn btn-secondary btn-sm" target="_blank">
+                                    <a href="{{ route('events.print.single', $presence->id) }}"
+                                        class="btn btn-secondary btn-sm" target="_blank">
                                         <i class="bi bi-printer"></i>
                                     </a>
                                 </td>
