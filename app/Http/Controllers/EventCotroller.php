@@ -152,6 +152,18 @@ class EventCotroller extends Controller
         return back();
     }
 
+    public function resetPresent(Event $event)
+    {
+        $event->load('presences');
+        foreach ($event->presences as $presence) {
+            $presence->update([
+                'is_present' => 0,
+            ]);
+        }
+        toastr()->success('Reset kahadiran presensi berhasil');
+        return back();
+    }
+
     public function presenceManual(Request $request)
     {
         $event = Event::find($request->input('event_id'));

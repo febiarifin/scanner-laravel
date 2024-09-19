@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('events/import', [EventCotroller::class, 'import'])->name('events.import');
     Route::get('events/export/{event}', [EventCotroller::class, 'export'])->name('events.export');
     Route::get('events/reset/{event}', [EventCotroller::class, 'reset'])->name('events.reset');
+    Route::get('events/reset-present/{event}', [EventCotroller::class, 'resetPresent'])->name('events.reset.present');
     Route::post('events/print', [EventCotroller::class, 'print'])->name('events.print');
     Route::post('events/presence-manual', [EventCotroller::class, 'presenceManual'])->name('events.presence.manual');
     Route::get('events/print-single/{id}', [EventCotroller::class, 'printSingle'])->name('events.print.single');

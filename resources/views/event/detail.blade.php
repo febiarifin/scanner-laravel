@@ -95,7 +95,11 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('events.reset', $event->id) }}" class="btn btn-danger mb-2"
+                    <a href="{{ route('events.reset.present', $event->id) }}" class="btn btn-warning mb-2"
+                        onclick="return confirm('Yakin ingin reset data kehadiran presensi?')"><i class="bi bi-trash"></i> Reset Data
+                        Kehadiran</a>
+
+                        <a href="{{ route('events.reset', $event->id) }}" class="btn btn-danger mb-2"
                         onclick="return confirm('Yakin ingin reset data presensi?')"><i class="bi bi-trash"></i> Reset Data
                         Presensi</a>
                 </div>
