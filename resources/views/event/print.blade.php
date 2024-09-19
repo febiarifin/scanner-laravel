@@ -28,7 +28,7 @@
                         {{ $presence->code }} / {{ $presence->kelas }}</span>
                 </div>
                 <div style="position: relative; top: 740px; left: 6px;">
-                    <div style="padding: 2px; border: 4px solid black; width: 36%; height: 180px;">
+                    <div>
                         {!! QrCode::size(180)->generate(base64_encode($presence->code)) !!}
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                             {{ $presence->code }} / {{ $presence->kelas }}</span>
                     </div>
                     <div style="position: relative; top: 740px; left: 6px;">
-                        <div style="padding: 2px; border: 4px solid black; width: 36%; height: 180px;">
+                        <div>
                             {!! QrCode::size(180)->generate(base64_encode($presence->code)) !!}
                         </div>
                     </div>
