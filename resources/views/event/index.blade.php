@@ -61,6 +61,8 @@
                             <td>{{ $event->name }}</td>
                             <td>{{ $event->date }}</td>
                             <td class="d-flex">
+                                <a href="{{ route('events.show', $event->id) }}" class="btn btn-success btn-sm shadow mx-2">Presensi Kehadiran <i
+                                    class="bi bi-arrow-right"></i></a>
                                 <a href="{{ route('events.edit', $event->id) }}" class="btn btn-primary btn-sm shadow"><i
                                         class="bi bi-info-circle"></i> Detail</a> &nbsp;
                                 <form action="{{ route('events.destroy', $event->id) }}" method="post">

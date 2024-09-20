@@ -34,6 +34,7 @@
         <form id="presenceForm" class="mb-1 row">
             <div class="col-10">
                 <select class="js-example-basic-single" name="presence_code" id="presence_code" style="width: 100% !important; font-size: 14pt;" required>
+                    <option value="">--pilih--</option>
                     @foreach ($get_presences as $presence)
                         <option value="{{ $presence->code }}">{{ $presence->name }}</option>
                     @endforeach

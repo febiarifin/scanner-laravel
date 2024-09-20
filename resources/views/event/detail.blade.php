@@ -126,6 +126,18 @@
                             {{ count($event->presences()->where('is_present', 1)->where('is_registered', 0)->get()) }}
                         </th>
                     </tr>
+                    <tr style="background-color: rgb(84, 158, 84);">
+                        <th colspan="8">TOTAL TERDAFTAR</th>
+                        <th colspan="2" class="text-center">
+                            {{ count($event->presences()->where('is_registered', 1)->get()) }}
+                        </th>
+                    </tr>
+                    <tr style="background-color: rgb(175, 97, 97);">
+                        <th colspan="8">TOTAL TIDAK TERDAFTAR</th>
+                        <th colspan="2" class="text-center">
+                            {{ count($event->presences()->where('is_registered', 0)->get()) }}
+                        </th>
+                    </tr>
                 </table>
                 <table class="table table-bordered" id="presence_table">
                     <thead>
@@ -163,8 +175,11 @@
                                     {{ $presence->is_registered ? 'IYA' : 'TIDAK' }}</td>
                                 <td>
                                     <a href="{{ route('events.print.single', $presence->id) }}"
-                                        class="btn btn-secondary btn-sm" target="_blank">
+                                        class="btn btn-secondary btn-sm mr-2" target="_blank">
                                         <i class="bi bi-printer"></i>
+                                    </a>
+                                    <a href="{{ route('events.change', $presence->id) }}" class="btn btn-default btn-sm">
+                                        <i class="bi bi-{{ $presence->is_registered ? 'x' : 'check' }}-circle text-{{ $presence->is_registered ? 'danger' : 'success' }}"></i>
                                     </a>
                                 </td>
                             </tr>

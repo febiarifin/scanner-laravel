@@ -214,4 +214,14 @@ class EventCotroller extends Controller
         ];
         return view('event.print', $data);
     }
+
+    public function change($id)
+    {
+        $presence = Presence::findOrFail($id);
+        $presence->update([
+            'is_registered' => $presence->is_registered ? 0 : 1,
+        ]);
+        toastr()->success('Ganti status kehadiran berhasil');
+        return back();
+    }
 }
