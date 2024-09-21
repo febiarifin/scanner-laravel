@@ -41,7 +41,7 @@ class QrcodeController extends Controller
             $message = "Data tidak ditemukan";
         }
         return response()->json([
-            'success' => true,
+            'success' => $status,
             'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
             'detail' => $presence ? $presence : null,
             'message' => $message,
