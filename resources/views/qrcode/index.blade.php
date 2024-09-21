@@ -11,6 +11,9 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="{{ asset('html5-qrcode.min.js') }}"></script>
     <style>
         table,
@@ -33,7 +36,8 @@
 
         <form id="presenceForm" class="mb-1 row">
             <div class="col-10">
-                <select class="js-example-basic-single" name="presence_code" id="presence_code" style="width: 100% !important; font-size: 14pt;" required>
+                <select class="js-example-basic-single" name="presence_code" id="presence_code"
+                    style="width: 100% !important; font-size: 14pt;" required>
                     <option value="">--pilih--</option>
                     @foreach ($get_presences as $presence)
                         <option value="{{ $presence->code }}">{{ $presence->name }}</option>
@@ -85,6 +89,8 @@
     </audio>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         var x = document.getElementById("myAudio");
 
@@ -105,7 +111,13 @@
                 },
                 success: function(response) {
                     // console.log(response);
-                    playAudio();
+                    if (response['success']) {
+                        playAudio();
+                        toastr.success(response['message']);
+                    } else {
+                        toastr.error(response['message']);
+                    }
+
                     if (response['detail']) {
                         let terdaftar = response['detail'].is_registered == 1 ? '<b>TERDAFTAR</b>' :
                             '<b>TIDAK TERDAFTAR</b>';
@@ -185,8 +197,12 @@
                         event_id: '{{ $event->id }}',
                     },
                     success: function(response) {
-                        // console.log(response);
-                        playAudio();
+                        if (response['success']) {
+                            playAudio();
+                            toastr.success(response['message']);
+                        } else {
+                            toastr.error(response['message']);
+                        }
 
                         if (response['detail']) {
                             if (response['detail']) {
