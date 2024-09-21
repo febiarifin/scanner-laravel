@@ -25,12 +25,17 @@ class QrcodeController extends Controller
         $presence = Presence::where('code', $code)->where('event_id', $event_id)->first();
 
         if ($presence) {
-            $presence->update([
-                'is_present' => 1,
-                'date' => now(),
-            ]);
-            $status = true;
-            $message = "Presensi berhasil";
+            if (!$presence->is_present) {
+                $presence->update([
+                    'is_present' => 1,
+                    'date' => now(),
+                ]);
+                $status = true;
+                $message = "Presensi berhasil";
+            } else {
+                $status = false;
+                $message = "Anda sudah melakukan absen jam " . $presence->date;
+            }
         } else {
             $status = false;
             $message = "Data tidak ditemukan";

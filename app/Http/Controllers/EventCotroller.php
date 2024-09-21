@@ -172,16 +172,23 @@ class EventCotroller extends Controller
             ->orWhere('name', $request->presence_code)
             ->first();
         if ($presence) {
-            $presence->update([
-                'is_present' => 1,
-                'date' => now(),
-            ]);
+            if (!$presence->is_present) {
+                $presence->update([
+                    'is_present' => 1,
+                    'date' => now(),
+                ]);
+                $status = true;
+                $message = 'Presensi manual berhasil';
+            }else{
+                $status = false;
+                $message = "Anda sudah melakukan absen jam ". $presence->date;
+            }
 
             return response()->json([
-                'success' => true,
+                'success' => $status,
                 'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
                 'detail' => $presence,
-                'message' => 'Presensi manual berhasil',
+                'message' => $message,
                 'counter' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->count(),
             ]);
         } else {
