@@ -98,6 +98,26 @@
             x.play();
         }
 
+        // Debounce function to limit Toastr calls
+        function debounce(func, delay) {
+            let timer;
+            return function() {
+                let context = this,
+                    args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        // Debounced Toastr functions
+        const showToastrSuccess = debounce(function(message) {
+            toastr.success(message);
+        }, 1000); // 1 second delay
+
+        const showToastrError = debounce(function(message) {
+            toastr.error(message);
+        }, 1000); // 1 second delay
+
         function onScanSuccess(decodedText, decodedResult) {
             scannerResult = decodedText;
 
@@ -113,9 +133,9 @@
                     // console.log(response);
                     if (response['success']) {
                         playAudio();
-                        toastr.success(response['message']);
+                        showToastrSuccess(response['message']);
                     } else {
-                        toastr.error(response['message']);
+                        showToastrError(response['message']);
                     }
 
                     if (response['detail']) {
@@ -199,9 +219,9 @@
                     success: function(response) {
                         if (response['success']) {
                             playAudio();
-                            toastr.success(response['message']);
+                            showToastrSuccess(response['message']);
                         } else {
-                            toastr.error(response['message']);
+                            showToastrError(response['message']);
                         }
 
                         if (response['detail']) {
