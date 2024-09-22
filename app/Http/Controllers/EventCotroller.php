@@ -158,6 +158,7 @@ class EventCotroller extends Controller
         foreach ($event->presences as $presence) {
             $presence->update([
                 'is_present' => 0,
+                'date' => null,
             ]);
         }
         toastr()->success('Reset kahadiran presensi berhasil');
