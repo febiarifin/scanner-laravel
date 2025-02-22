@@ -75,8 +75,8 @@
                         <td>{{ $presence->code }}</td>
                         <td>{{ $presence->date }}</td>
                         <td class="bg-success text-white">HADIR</td>
-                        <td class="{{ $presence->terdaftar ? 'bg-success' : 'bg-danger' }} text-white">
-                            {{ $presence->terdaftar ? 'YA' : 'TIDAK' }}</td>
+                        <td class="{{ $presence->is_registered ? 'bg-success' : 'bg-danger' }} text-white">
+                            {{ $presence->is_registered ? 'YA' : 'TIDAK' }}</td>
                     </tr>
                 @endforeach
             </tbody>
