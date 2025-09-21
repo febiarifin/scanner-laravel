@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barcode Scanner</title>
+    <title>Absensi : {{ $event->name }}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -28,8 +28,13 @@
     <div class="container mt-2">
         <div class="mb-3 d-flex">
             <div class="flex-grow-1">
-                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary shadow btn-sm"><i
-                        class="bi bi-arrow-left"></i> Rekap Presensi</a>
+                @if (Auth::user()->type === \App\Models\User::TYPE_ADMIN)
+                    <a href="{{ route('events.edit', $event->id) }}" class="btn btn-secondary shadow btn-sm"><i
+                            class="bi bi-arrow-left"></i> Rekap Presensi</a>
+                @else
+                    <a href="{{ route('events.index') }}" class="btn btn-secondary shadow btn-sm"><i
+                            class="bi bi-arrow-left"></i> Kembali</a>
+                @endif
             </div>
             <h4 class="flex-shrink-0">#{{ $event->name }}</h4>
         </div>
@@ -75,8 +80,8 @@
                         <td>{{ $presence->code }}</td>
                         <td>{{ $presence->date }}</td>
                         <td class="bg-success text-white">HADIR</td>
-                        <td class="{{ $presence->terdaftar ? 'bg-success' : 'bg-danger' }} text-white">
-                            {{ $presence->terdaftar ? 'YA' : 'TIDAK' }}</td>
+                        <td class="{{ $presence->is_registered ? 'bg-success' : 'bg-danger' }} text-white">
+                            {{ $presence->is_registered ? 'YA' : 'TIDAK' }}</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -6,6 +6,7 @@ use App\Exports\PresenceExport;
 use App\Imports\PresenceImport;
 use App\Models\Event;
 use App\Models\Presence;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -79,6 +80,10 @@ class EventCotroller extends Controller
      */
     public function edit(Event $event)
     {
+        if (Auth()->user()->type !== User::TYPE_ADMIN) {
+            return back();
+        }
+
         $event->load('presences');
         $classes = $event->presences()->select('kelas')->groupBy('kelas')->get();
         $data = [
@@ -110,6 +115,10 @@ class EventCotroller extends Controller
      */
     public function destroy(Event $event)
     {
+        if (Auth()->user()->type !== User::TYPE_ADMIN) {
+            return back();
+        }
+
         $event->load('presences');
         if (count($event->presences) != 0) {
             toastr()->warning('Event sudah ada data presensi');
@@ -146,6 +155,10 @@ class EventCotroller extends Controller
 
     public function reset(Event $event)
     {
+        if (Auth()->user()->type !== User::TYPE_ADMIN) {
+            return back();
+        }
+
         $event->load('presences');
         $event->presences()->delete();
         toastr()->success('Reset data presensi berhasil');
@@ -154,6 +167,10 @@ class EventCotroller extends Controller
 
     public function resetPresent(Event $event)
     {
+        if (Auth()->user()->type !== User::TYPE_ADMIN) {
+            return back();
+        }
+        
         $event->load('presences');
         foreach ($event->presences as $presence) {
             $presence->update([
@@ -180,9 +197,9 @@ class EventCotroller extends Controller
                 ]);
                 $status = true;
                 $message = 'Presensi manual berhasil';
-            }else{
+            } else {
                 $status = false;
-                $message = "Anda sudah melakukan absen jam ". $presence->date;
+                $message = "Anda sudah melakukan absen jam " . $presence->date;
             }
 
             return response()->json([

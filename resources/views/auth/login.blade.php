@@ -1,8 +1,8 @@
 @extends('layouts.template')
 
 @section('content')
-    <div class="container">
-        <div class="card mt-5">
+    <div class="container justify-content-center d-flex">
+        <div class="card mt-5 col-md-6">
             <div class="card-body">
                 <form action="{{ route('login.auth') }}" method="POST">
                     @csrf
