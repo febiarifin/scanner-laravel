@@ -19,15 +19,15 @@
     @if ($is_single)
         <div class="paper">
             <div style="margin-left: -10px; margin-top:20px;">
-                <img src="{{ asset('templete_surat_new_1.jpg') }}" width="700px">
+                <img src="{{ asset('pleno_2025.jpg') }}" width="700px">
             </div>
             <div style="margin-left: -400px; width: 500px !important;">
                 <div>
                     <span
-                        style="font-size: {{ strlen($presence->name) > 16 ? 12 : 12 }}pt; position: relative; top: 196px; left: 174px;">{{ $presence->name }}<br>
+                        style="font-size: {{ strlen($presence->name) > 16 ? 12 : 12 }}pt; position: relative; top: 196px; left: 178px;">{{ $presence->name }}<br>
                         {{ $presence->code }} / {{ $presence->kelas }}</span>
                 </div>
-                <div style="position: relative; top: 740px; left: 6px;">
+                <div style="position: relative; top: 730px; left: 6px;">
                     <div>
                         {!! QrCode::size(180)->generate(base64_encode($presence->code)) !!}
                     </div>
@@ -38,15 +38,15 @@
         @foreach ($presences as $presence)
             <div class="paper">
                 <div style="margin-left: -10px; margin-top:20px;">
-                    <img src="{{ asset('templete_surat_new_1.jpg') }}" width="700px">
+                    <img src="{{ asset('pleno_2025.jpg') }}" width="700px">
                 </div>
                 <div style="margin-left: -400px; width: 500px !important;">
                     <div>
                         <span
-                            style="font-size: {{ strlen($presence->name) > 16 ? 12 : 12 }}pt; position: relative; top: 196px; left: 174px;">{{ $presence->name }}<br>
+                            style="font-size: {{ strlen($presence->name) > 16 ? 12 : 12 }}pt; position: relative; top: 196px; left: 178px;">{{ $presence->name }}<br>
                             {{ $presence->code }} / {{ $presence->kelas }}</span>
                     </div>
-                    <div style="position: relative; top: 740px; left: 6px;">
+                    <div style="position: relative; top: 730px; left: 6px;">
                         <div>
                             {!! QrCode::size(180)->generate(base64_encode($presence->code)) !!}
                         </div>
