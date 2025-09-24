@@ -81,9 +81,9 @@
                                             <label>Pilih Kelas</label>
                                             <select name="kelas" id="kelas" class="form-control" required>
                                                 <option value="">--pilih kelas--</option>
-                                               @foreach ($classes as $class)
-                                               <option value="{{ $class->kelas }}">{{ $class->kelas }}</option>
-                                               @endforeach
+                                                @foreach ($classes as $class)
+                                                    <option value="{{ $class->kelas }}">{{ $class->kelas }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -95,13 +95,23 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('events.reset.present', $event->id) }}" class="btn btn-warning mb-2"
+                    {{-- <a href="{{ route('events.reset.present', $event->id) }}" class="btn btn-warning mb-2"
                         onclick="return confirm('Yakin ingin reset data kehadiran presensi?')"><i class="bi bi-trash"></i> Reset Data
                         Kehadiran</a>
 
                         <a href="{{ route('events.reset', $event->id) }}" class="btn btn-danger mb-2"
                         onclick="return confirm('Yakin ingin reset data presensi?')"><i class="bi bi-trash"></i> Reset Data
-                        Presensi</a>
+                        Presensi</a> --}}
+
+                    <a href="{{ route('events.reset.present', $event->id) }}" class="btn btn-warning mb-2"
+                        onclick="return confirmPin('Yakin ingin reset data kehadiran presensi?', 'fengpin')">
+                        <i class="bi bi-trash"></i> Reset Data Kehadiran
+                    </a>
+
+                    <a href="{{ route('events.reset', $event->id) }}" class="btn btn-danger mb-2"
+                        onclick="return confirmPin('Yakin ingin reset data presensi?', 'fengpin')">
+                        <i class="bi bi-trash"></i> Reset Data Presensi
+                    </a>
                 </div>
                 <table class="table-bordered">
                     <tr style="background-color: rgb(136, 211, 136);">
@@ -179,7 +189,8 @@
                                         <i class="bi bi-printer"></i>
                                     </a>
                                     <a href="{{ route('events.change', $presence->id) }}" class="btn btn-default btn-sm">
-                                        <i class="bi bi-{{ $presence->is_registered ? 'x' : 'check' }}-circle text-{{ $presence->is_registered ? 'danger' : 'success' }}"></i>
+                                        <i
+                                            class="bi bi-{{ $presence->is_registered ? 'x' : 'check' }}-circle text-{{ $presence->is_registered ? 'danger' : 'success' }}"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -198,5 +209,18 @@
         $(document).ready(function() {
             $('#presence_table').DataTable();
         });
+
+        function confirmPin(message, pin) {
+            if (confirm(message)) {
+                let input = prompt("Masukkan PIN untuk konfirmasi:");
+                if (input === pin) {
+                    return true; // lanjut ke route
+                } else {
+                    alert("PIN salah! Aksi dibatalkan.");
+                    return false; // batalkan
+                }
+            }
+            return false;
+        }
     </script>
 @endsection
