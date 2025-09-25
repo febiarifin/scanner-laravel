@@ -19,7 +19,7 @@
     @if ($is_single)
         <div class="paper">
             <div style="margin-left: -10px; margin-top:20px;">
-                <img src="{{ asset('pleno_2025.jpg') }}" width="700px">
+                <img src="{{ asset('pleno_2025_1.jpg') }}" width="700px">
             </div>
             <div style="margin-left: -400px; width: 500px !important;">
                 <div>
@@ -38,7 +38,7 @@
         @foreach ($presences as $presence)
             <div class="paper">
                 <div style="margin-left: -10px; margin-top:20px;">
-                    <img src="{{ asset('pleno_2025.jpg') }}" width="700px">
+                    <img src="{{ asset('pleno_2025_1.jpg') }}" width="700px">
                 </div>
                 <div style="margin-left: -400px; width: 500px !important;">
                     <div>
