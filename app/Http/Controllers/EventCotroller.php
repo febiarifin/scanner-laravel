@@ -65,11 +65,13 @@ class EventCotroller extends Controller
         $event->load('presences');
         $data = [
             'event' => $event,
-            'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+            'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(100)->get(),
+            // 'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
             'get_presences' => $event->presences,
             'count_presences' => $event->presences()->where('is_present', 1)->get(),
         ];
-        return view('qrcode.index', $data);
+        // return view('qrcode.index', $data);
+        return view('qrcode.index_assessment', $data);
     }
 
     /**
@@ -92,7 +94,8 @@ class EventCotroller extends Controller
             'presences' => $event->presences,
             'classes' => $classes,
         ];
-        return view('event.detail', $data);
+        // return view('event.detail', $data);
+        return view('event.detail_assessment', $data);
     }
 
     /**
@@ -170,7 +173,7 @@ class EventCotroller extends Controller
         if (Auth()->user()->type !== User::TYPE_ADMIN) {
             return back();
         }
-        
+
         $event->load('presences');
         foreach ($event->presences as $presence) {
             $presence->update([
@@ -185,7 +188,7 @@ class EventCotroller extends Controller
     public function presenceManual(Request $request)
     {
         $event = Event::find($request->input('event_id'));
-        $presence = Presence::where('code',  $request->presence_code)
+        $presence = Presence::where('code', $request->presence_code)
             ->where('event_id', $event->id)
             ->orWhere('name', $request->presence_code)
             ->first();
@@ -248,5 +251,18 @@ class EventCotroller extends Controller
         ]);
         toastr()->success('Ganti status kehadiran berhasil');
         return back();
+    }
+
+    public function updateCode(Request $request, $id)
+    {
+        // return $request->all();
+
+        $presence = Presence::findOrFail($id);
+
+        $presence->update([
+            'code' => $request->code,
+        ]);
+
+        return back()->with('success', 'Data presensi berhasil diupdate');
     }
 }

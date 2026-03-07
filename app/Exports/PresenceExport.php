@@ -23,9 +23,13 @@ class PresenceExport implements FromView
     */
     public function view(): View
     {
-        return view('report.excel', [
+        return view('report.excel_assessment', [
             'event' => $this->event,
             'presences' => $this->presences,
         ]);
+        // return view('report.excel', [
+        //     'event' => $this->event,
+        //     'presences' => $this->presences,
+        // ]);
     }
 }

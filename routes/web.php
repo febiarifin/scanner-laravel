@@ -38,4 +38,6 @@ Route::group(['middleware' => 'auth'], function(){
         \Illuminate\Support\Facades\Auth::logout();
         return redirect('/');
     })->name('logout');
+
+    Route::put('/presences/{id}', [EventCotroller::class, 'updateCode'])->name('presences.update');
 });

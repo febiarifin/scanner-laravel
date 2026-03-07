@@ -11,14 +11,18 @@ class QrcodeController extends Controller
 {
     public function index()
     {
-        return view('qrcode.index', [
-            'presences' => Presence::orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+        return view('qrcode.index_assessment', [
+            'presences' => Presence::orderBy('date', 'desc')->where('is_present', 1)->limit(100)->get(),
         ]);
+        // return view('qrcode.index', [
+        //     'presences' => Presence::orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+        // ]);
     }
 
     public function post(Request $request)
     {
-        $code = base64_decode($request->input('code'));
+        // $code = base64_decode($request->input('code'));
+        $code = $request->input('code');
         $event_id = $request->input('event_id');
         $event = Event::find($request->input('event_id'));
 
@@ -42,7 +46,8 @@ class QrcodeController extends Controller
         }
         return response()->json([
             'success' => $status,
-            'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
+            'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(100)->get(),
+            // 'presences' => $event->presences()->orderBy('date', 'desc')->where('is_present', 1)->limit(10)->get(),
             'detail' => $presence ? $presence : null,
             'message' => $message,
             'status' => $status,
